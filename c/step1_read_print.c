@@ -3,6 +3,8 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
+#include "types.h"
+
 /* Stub function returning its arg */
 char* READ(char* input) {
 
