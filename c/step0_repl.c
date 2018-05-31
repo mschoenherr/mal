@@ -33,7 +33,7 @@ int main(int* argc, char** argv) {
 
   char* input;
 
-  while(input = readline("mal> ")) {
+  while(input = readline("mal-user> ")) {
 
     puts(rep(input));
   }
