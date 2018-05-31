@@ -1,6 +1,7 @@
 #include <stdio.h>
 
 #include <readline/readline.h>
+#include <readline/history.h>
 
 /* Stub function returning its arg */
 char* READ(char* input) {
@@ -35,6 +36,7 @@ int main(int* argc, char** argv) {
 
   while(input = readline("mal-user> ")) {
 
+    add_history(input);
     puts(rep(input));
   }
 
