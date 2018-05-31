@@ -2,37 +2,40 @@
 
 #include <readline/readline.h>
 
-char* READ() {
+/* Stub function returning its arg */
+char* READ(char* input) {
 
-  return readline("mal> ");
+  return input;
 }
 
+/* Stub function returning its arg */
 char* EVAL(char* input) {
 
   return input;
 }
 
-void PRINT(char* output) {
+/* Stub function returning its arg */
+char* PRINT(char* input) {
 
-  puts(output);
+  return input;
 }
 
-int rep() {
+/* Calls READ, EVAL, PRINT in order and returns 
+   the result of PRINT */
+char* rep(char* input) {
 
-  char* input = READ();
+  return PRINT(EVAL(READ(input)));
 
-  if (!input) {
-    return -1;
-  }
-  
-  PRINT(EVAL(input));
-
-  return 0;
 }
 
+/* Endlessly calls rep and prints its result */
 int main(int* argc, char** argv) {
 
-  while(rep() == 0) {
+  char* input;
+
+  while(input = readline("mal> ")) {
+
+    puts(rep(input));
   }
 
   return 0;
