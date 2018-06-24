@@ -4,11 +4,13 @@
 #include <readline/history.h>
 
 #include "types.h"
+#include "reader.h"
+#include "ll.c/ll.h"
 
 /* Stub function returning its arg */
 char* READ(char* input) {
 
-  return input;
+  return *tokenize(&input);
 }
 
 /* Stub function returning its arg */
