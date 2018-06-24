@@ -7,12 +7,65 @@
 #include "types.h"
 #include "ll.c/ll.h"
 
+int isleftparen(char c) {
+
+  int result;
+
+  switch (c) {
+  case '(':
+    result = 1;
+    break;
+  case '[':
+    result = 1;
+    break;
+  case '{':
+    result = 1;
+    break;
+  default:
+    result = 0;
+  }
+
+  return result;
+}
+
+int isrightparen(char c) {
+
+  int result;
+
+  switch (c) {
+  case ')':
+    result = 1;
+    break;
+  case ']':
+    result = 1;
+    break;
+  case '}':
+    result = 1;
+    break;
+  default:
+    result = 0;
+  }
+
+  return result;
+}
+
+int isspecialchar(char c) {
+
+  int result = 0;
+
+  if (isleftparen(c) || isrightparen(c) || c == '`' || c == '~' || c == '\'' || c == '^' || c == '@') {
+    result = 1;
+  }
+
+  return result;
+}
+
 char* pop_nonspace_substr (char** input, int num_chars) {
 
   int pos = 0;
 
   if (num_chars == 0 && strlen(*input) > 1) {
-    while (!isspace((*input)[pos]) && (*input)[pos] != '\0') {
+    while (!isspace((*input)[pos]) && !isspecialchar((*input)[pos]) && (*input)[pos] != '\0') {
       pos++;
     }
   } else {
@@ -50,9 +103,11 @@ char* pop_token (char** input) {
 
   drop_spaces(input);
 
-  if (*input[0] == '\0') {}
+  if ((*input)[0] == '\0') {}
   else if (strlen(*input) > 2 && *input[0] == '~' && *input[1] == '@') {
     token = pop_nonspace_substr(input,2);
+  } else if (isspecialchar((*input)[0])) {
+    token = pop_nonspace_substr(input,1);
   } else {
     token = pop_nonspace_substr(input,0);
   }
@@ -69,11 +124,13 @@ char** tokenize (char** input) {
   token = pop_token(input);
 
   // if there is no token to extract, stop and return NULL
-  if (!token || strlen(token) == 1) {
+  if (!token) {
     return rest_list;
   }
 
-  rest_list = tokenize(input);
+  if (strlen(*input) > 1) {
+    rest_list = tokenize(input);
+  }
 
   token_list = ll_new(rest_list);
 
