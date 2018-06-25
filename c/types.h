@@ -1,6 +1,8 @@
+typedef struct mal_typed_value mal_v;
 
-struct mal_typed_value;
+int set_type (mal_v* value, char type);
+int set_atomic_content (mal_v* value, char* token);
 
-struct mal_linked_list;
-
-struct mal_linked_list* add_node(struct mal_typed_value mv, struct mal_linked_list* mll);
+extern char LIST;
+extern char SYMBOL;
+extern char INTEGER;

@@ -138,3 +138,30 @@ char** tokenize (char** input) {
   
   return token_list;
 }
+
+
+/* peek and pop take a pointer to a linked list of tokens.
+   This way, freeing resources can be handled by ll.c */
+char* peek (char*** token_list) {
+  return *(*token_list);
+}
+
+char* pop (char*** token_list) {
+  char* token = *ll_pop(*token_list);
+  return token;
+}
+
+mal_v* read_atom (char*** token_list) {
+
+  mal_v* result = (mal_v*) malloc(1);
+  char* token = peek(token_list);
+
+  if (isdigit(token[0]) || (token[0] == '-' && isdigit(token[1]))) {
+    set_type(result, INTEGER);
+  } else {
+    set_type(result, SYMBOL);
+    set_atomic_content(result, token);
+  }
+
+  return result;
+}
