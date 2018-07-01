@@ -154,14 +154,60 @@ char* pop (char*** token_list) {
 mal_v* read_atom (char*** token_list) {
 
   mal_v* result = (mal_v*) malloc(1);
-  char* token = peek(token_list);
+  char* token = pop(token_list);
 
   if (isdigit(token[0]) || (token[0] == '-' && isdigit(token[1]))) {
     set_type(result, INTEGER);
   } else {
     set_type(result, SYMBOL);
-    set_atomic_content(result, token);
   }
+
+  set_atomic_content(result, token);
+  return result;
+}
+
+mal_v* read_form(char*** token_list);
+
+mal_v** read_list_helper(char*** token_list) {
+
+  mal_v** result;
+  mal_v* item;
+  
+  if ((peek(token_list))[0] == ')') {
+    pop(token_list);
+    result = ll_new(NULL);
+    set_type(*result,NIL);
+  } else {
+    item = read_form(token_list);
+    result = ll_new(read_list_helper(token_list));
+    *result = item;
+  }
+
+  return result;
+}
+
+mal_v* read_list(char*** token_list) {
+
+  mal_v** llist = read_list_helper(token_list);
+  mal_v* result = (mal_v*) malloc(1);
+
+  set_type(result, LIST);
+  set_list_content(result, llist);
+
+  return result;
+}
+
+mal_v* read_form(char*** token_list) {
+
+  mal_v* result = (mal_v*) malloc(1);
+
+  if ((peek(token_list))[0] == ')') {
+    result = read_list(token_list);
+  } else {
+    result = read_atom(token_list);
+  }
+
+  // maybe throw error, if token_list non-empty, now
 
   return result;
 }

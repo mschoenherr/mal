@@ -8,9 +8,10 @@ struct mal_typed_value {
   void** value;
 };
 
-char LIST = 0;
-char SYMBOL = 1;
-char INTEGER = 2;
+char NIL = 0;
+char LIST = 1;
+char SYMBOL = 2;
+char INTEGER = 3;
 
 int set_type (mal_v* value, char type) {
 
@@ -24,7 +25,20 @@ int set_atomic_content (mal_v* value, char* token) {
   if (value->type == SYMBOL) {
     *(value->value) = (char *) malloc(strlen(token));
     strcpy(*(value->value), token);
+  } else if (value->type == INTEGER) {
+    *(value->value) = (int*) malloc(1);
+    *(value->value) = 0; // fix this
   }
   
+  return 0;
+}
+
+int set_list_content(mal_v* list, mal_v** llist) {
+
+  if (list->type == LIST) {
+    // this will probably blow up?
+    *(list->value)= llist;
+  }
+
   return 0;
 }
