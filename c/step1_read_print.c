@@ -1,7 +1,7 @@
 #include <stdio.h>
+#include <stdlib.h>
 
-#include <readline/readline.h>
-#include <readline/history.h>
+#include "linenoise/linenoise.h"
 
 #include "types.h"
 #include "reader.h"
@@ -39,10 +39,10 @@ int main(int* argc, char** argv) {
 
   char* input;
 
-  while(input = readline("mal-user> ")) {
+  while(input = linenoise("mal-user> ")) {
 
-    add_history(input);
     puts(rep(input));
+    linenoiseFree(input);
   }
 
   return 0;

@@ -1,3 +1,6 @@
 [submodule "c/ll.c"]
 	path = c/ll.c
 	url = https://github.com/clehner/ll.c
+[submodule "c/linenoise"]
+	path = c/linenoise
+	url = https://github.com/antirez/linenoise

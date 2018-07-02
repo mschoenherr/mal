@@ -147,7 +147,8 @@ char* peek (char*** token_list) {
 }
 
 char* pop (char*** token_list) {
-  char* token = *ll_pop(*token_list);
+  char* token = peek(token_list);
+  ll_pop(*token_list);
   return token;
 }
 
@@ -201,7 +202,7 @@ mal_v* read_form(char*** token_list) {
 
   mal_v* result = (mal_v*) malloc(1);
 
-  if ((peek(token_list))[0] == ')') {
+  if ((peek(token_list))[0] == '(') {
     result = read_list(token_list);
   } else {
     result = read_atom(token_list);
