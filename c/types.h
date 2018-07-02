@@ -1,4 +1,13 @@
-typedef struct mal_typed_value mal_v;
+#ifndef MAL_TYPE
+#define MAL_TYPE
+typedef struct mal_typed_value {
+  char type;
+  void** value;
+} mal_v;
+#endif /* MAL_TYPE */
+
+#ifndef TYPES_H
+#define TYPES_H
 
 int set_type (mal_v* value, char type);
 int set_atomic_content (mal_v* value, char* token);
@@ -8,3 +17,5 @@ extern char NIL;
 extern char LIST;
 extern char SYMBOL;
 extern char INTEGER;
+
+#endif /* TYPES_H */

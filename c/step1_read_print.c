@@ -5,24 +5,25 @@
 
 #include "types.h"
 #include "reader.h"
+#include "printer.h"
 #include "ll.c/ll.h"
 
 /* Stub function returning its arg */
-char* READ(char* input) {
+mal_v* READ(char* input) {
 
-  return *tokenize(&input);
+  return read_str(input);
 }
 
 /* Stub function returning its arg */
-char* EVAL(char* input) {
+mal_v* EVAL(mal_v* ast) {
 
-  return input;
+  return ast;
 }
 
 /* Stub function returning its arg */
-char* PRINT(char* input) {
+char* PRINT(mal_v* ast) {
 
-  return input;
+  return pr_str(ast);
 }
 
 /* Calls READ, EVAL, PRINT in order and returns 

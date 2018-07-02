@@ -1,17 +1,20 @@
-#include "types.h"
 #include <string.h>
 #include <stdlib.h>
 
 /* Basis for type system */
-struct mal_typed_value {
-  char type;
-  void** value;
-};
-
 char NIL = 0;
 char LIST = 1;
 char SYMBOL = 2;
 char INTEGER = 3;
+
+#ifndef MAL_TYPE
+#define MAL_TYPE
+typedef struct mal_typed_value {
+  char type;
+  void** value;
+} mal_v;
+#endif /* MAL_TYPE */
+
 
 int set_type (mal_v* value, char type) {
 

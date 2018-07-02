@@ -211,3 +211,10 @@ mal_v* read_form(char*** token_list) {
 
   return result;
 }
+
+mal_v* read_str(char* input) {
+
+  char** token_list = tokenize(&input);
+
+  return read_form(&token_list);
+}
