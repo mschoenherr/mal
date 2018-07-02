@@ -142,17 +142,19 @@ char** tokenize (char** input) {
 
 /* peek and pop take a pointer to a linked list of tokens.
    This way, freeing resources can be handled by ll.c */
-char* peek (char*** token_list) {
-  return *(*token_list);
+char* peek (char** token_list) {
+  char* result = (char*) malloc(strlen(*token_list));
+  strcpy(result,*token_list);
+  return result;
 }
 
-char* pop (char*** token_list) {
+char* pop (char** token_list) {
   char* token = peek(token_list);
-  ll_pop(*token_list);
+  ll_pop(token_list);
   return token;
 }
 
-mal_v* read_atom (char*** token_list) {
+mal_v* read_atom (char** token_list) {
 
   mal_v* result = (mal_v*) malloc(1);
   char* token = pop(token_list);
@@ -167,9 +169,9 @@ mal_v* read_atom (char*** token_list) {
   return result;
 }
 
-mal_v* read_form(char*** token_list);
+mal_v* read_form(char** token_list);
 
-mal_v** read_list_helper(char*** token_list) {
+mal_v** read_list_helper(char** token_list) {
 
   mal_v** result;
   mal_v* item;
@@ -187,7 +189,7 @@ mal_v** read_list_helper(char*** token_list) {
   return result;
 }
 
-mal_v* read_list(char*** token_list) {
+mal_v* read_list(char** token_list) {
 
   mal_v** llist = read_list_helper(token_list);
   mal_v* result = (mal_v*) malloc(1);
@@ -198,9 +200,9 @@ mal_v* read_list(char*** token_list) {
   return result;
 }
 
-mal_v* read_form(char*** token_list) {
+mal_v* read_form(char** token_list) {
 
-  mal_v* result = (mal_v*) malloc(1);
+  mal_v* result;
 
   if ((peek(token_list))[0] == '(') {
     result = read_list(token_list);
@@ -217,5 +219,5 @@ mal_v* read_str(char* input) {
 
   char** token_list = tokenize(&input);
 
-  return read_form(&token_list);
+  return read_form(token_list);
 }

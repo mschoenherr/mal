@@ -2,7 +2,11 @@
 #define MAL_TYPE
 typedef struct mal_typed_value {
   char type;
-  void** value;
+  union {
+    int integer;
+    char* symbol;
+    struct mal_typed_value** list;
+  } value;
 } mal_v;
 #endif /* MAL_TYPE */
 

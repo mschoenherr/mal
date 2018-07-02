@@ -11,10 +11,13 @@ char INTEGER = 3;
 #define MAL_TYPE
 typedef struct mal_typed_value {
   char type;
-  void** value;
+  union {
+    int integer;
+    char* symbol;
+    struct mal_typed_value** list;
+  } value;
 } mal_v;
 #endif /* MAL_TYPE */
-
 
 int set_type (mal_v* value, char type) {
 
@@ -26,11 +29,9 @@ int set_type (mal_v* value, char type) {
 int set_atomic_content (mal_v* value, char* token) {
 
   if (value->type == SYMBOL) {
-    *(value->value) = (char *) malloc(strlen(token));
-    strcpy(*(value->value), token);
+    (value->value).symbol = token;
   } else if (value->type == INTEGER) {
-    *(value->value) = (int*) malloc(1);
-    *(value->value) = 0; // fix this
+    (value->value).integer = 0; // fix this
   }
   
   return 0;
@@ -40,7 +41,7 @@ int set_list_content(mal_v* list, mal_v** llist) {
 
   if (list->type == LIST) {
     // this will probably blow up?
-    *(list->value)= llist;
+    (list->value).list= llist;
   }
 
   return 0;
