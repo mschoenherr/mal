@@ -1,5 +1,3 @@
-#include <stdio.h>
-//stdio only included for debugging
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
@@ -64,8 +62,8 @@ char* pop_nonspace_substr (char** input, int num_chars) {
 
   int pos = 0;
 
-  if (num_chars == 0 && strlen(*input) > 1) {
-    while (!isspace((*input)[pos]) && !isspecialchar((*input)[pos]) && (*input)[pos] != '\0') {
+  if (num_chars == 0 && strlen(*input) > 0) {
+    while (!isspace((*input)[pos]) && !isrightparen((*input)[pos]) && (*input)[pos] != '\0') {
       pos++;
     }
   } else {
@@ -88,7 +86,7 @@ char* pop_nonspace_substr (char** input, int num_chars) {
 
 char** drop_spaces (char** input) {
 
-  if (strlen(*input) > 1) {
+  if (strlen(*input) > 0) {
     while (isspace(**input)) {
       (*input)++;
     }
@@ -99,12 +97,12 @@ char** drop_spaces (char** input) {
 
 char* pop_token (char** input) {
 
-  char* token = NULL;
+  char* token;
 
   drop_spaces(input);
 
   if ((*input)[0] == '\0') {}
-  else if (strlen(*input) > 2 && *input[0] == '~' && *input[1] == '@') {
+  else if (strlen(*input) > 1 && *input[0] == '~' && *input[1] == '@') {
     token = pop_nonspace_substr(input,2);
   } else if (isspecialchar((*input)[0])) {
     token = pop_nonspace_substr(input,1);
@@ -128,7 +126,7 @@ char** tokenize (char** input) {
     return rest_list;
   }
 
-  if (strlen(*input) > 1) {
+  if (strlen(*input) > 0) {
     rest_list = tokenize(input);
   }
 
@@ -142,19 +140,19 @@ char** tokenize (char** input) {
 
 /* peek and pop take a pointer to a linked list of tokens.
    This way, freeing resources can be handled by ll.c */
-char* peek (char** token_list) {
-  char* result = (char*) malloc(strlen(*token_list));
-  strcpy(result,*token_list);
-  return result;
-}
-
-char* pop (char** token_list) {
-  char* token = peek(token_list);
-  ll_pop(token_list);
+char* peek (char*** token_list) {
+  char* token = (char*) malloc(strlen(**token_list)+ 1);
+  strcpy(token, **token_list);
   return token;
 }
 
-mal_v* read_atom (char** token_list) {
+char* pop (char*** token_list) {
+  char* token = peek(token_list);
+  *token_list = ll_pop(*token_list); //ll_pop frees current pointer and returns next one
+  return token;
+}
+
+mal_v* read_atom (char*** token_list) {
 
   mal_v* result = (mal_v*) malloc(1);
   char* token = pop(token_list);
@@ -169,14 +167,15 @@ mal_v* read_atom (char** token_list) {
   return result;
 }
 
-mal_v* read_form(char** token_list);
+mal_v* read_form(char*** token_list);
 
-mal_v** read_list_helper(char** token_list) {
+mal_v** read_list_helper(char*** token_list) {
 
-  mal_v** result;
+  mal_v** result = NULL;
   mal_v* item;
+  char* token = peek(token_list);
   
-  if ((peek(token_list))[0] == ')') {
+  if (token[0] == ')') {
     pop(token_list);
     result = ll_new(NULL);
     set_type(*result,NIL);
@@ -189,7 +188,7 @@ mal_v** read_list_helper(char** token_list) {
   return result;
 }
 
-mal_v* read_list(char** token_list) {
+mal_v* read_list(char*** token_list) {
 
   mal_v** llist = read_list_helper(token_list);
   mal_v* result = (mal_v*) malloc(1);
@@ -200,11 +199,13 @@ mal_v* read_list(char** token_list) {
   return result;
 }
 
-mal_v* read_form(char** token_list) {
+mal_v* read_form(char*** token_list) {
 
   mal_v* result;
+  char* token = peek(token_list);
 
-  if ((peek(token_list))[0] == '(') {
+  if (token[0] == '(') {
+    pop(token_list);
     result = read_list(token_list);
   } else {
     result = read_atom(token_list);
@@ -219,5 +220,5 @@ mal_v* read_str(char* input) {
 
   char** token_list = tokenize(&input);
 
-  return read_form(token_list);
+  return read_form(&token_list);
 }
