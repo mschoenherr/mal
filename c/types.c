@@ -31,7 +31,7 @@ int set_atomic_content (mal_v* value, char* token) {
   if (value->type == SYMBOL) {
     (value->value).symbol = token;
   } else if (value->type == INTEGER) {
-    (value->value).integer = 0; // fix this
+    (value->value).integer = atoi(token);
   }
   
   return 0;
@@ -45,4 +45,13 @@ int set_list_content(mal_v* list, mal_v** llist) {
   }
 
   return 0;
+}
+
+void* get_atomic_content(mal_v* value) {
+
+  if (value->type == SYMBOL) {
+    return &(value->value.symbol);
+  } else if (value->type == INTEGER) {
+    return &(value->value.integer);
+  }
 }
