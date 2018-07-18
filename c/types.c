@@ -1,5 +1,6 @@
 #include <string.h>
 #include <stdlib.h>
+#include "ll.c/ll.h"
 
 /* Basis for type system */
 char NIL = 0;
@@ -26,6 +27,10 @@ int set_type (mal_v* value, char type) {
   return 0;
 }
 
+char get_type(mal_v* value) {
+  return value->type;
+}
+
 int set_atomic_content (mal_v* value, char* token) {
 
   if (value->type == SYMBOL) {
@@ -45,6 +50,10 @@ int set_list_content(mal_v* list, mal_v** llist) {
   }
 
   return 0;
+}
+
+mal_v** get_list_content(mal_v* value) {
+  return (value->value).list;
 }
 
 void* get_atomic_content(mal_v* value) {
