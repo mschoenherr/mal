@@ -38,9 +38,11 @@ char* rep(char* input) {
 int main(int* argc, char** argv) {
 
   char* input;
+  linenoiseHistorySetMaxLen(1000);
 
   while(input = linenoise("mal-user> ")) {
 
+    linenoiseHistoryAdd(input);
     puts(rep(input));
     linenoiseFree(input);
   }
