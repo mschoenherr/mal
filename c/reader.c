@@ -71,7 +71,7 @@ char* pop_nonspace_substr (char** input, int num_chars) {
   }
 
   /* allocating for pos++ chars, for insert of \0 */
-  char* result = (char *) malloc((pos + 1));
+  char* result = (char *) malloc(pos + 1);
 
   if (pos) {
     strncpy(result, *input, pos);
@@ -141,7 +141,7 @@ char** tokenize (char** input) {
 /* peek and pop take a pointer to a linked list of tokens.
    This way, freeing resources can be handled by ll.c */
 char* peek (char*** token_list) {
-  char* token = (char*) malloc(strlen(**token_list)+ 1);
+  char* token = (char*) malloc(strlen(**token_list) + 1);
   strcpy(token, **token_list);
   return token;
 }
@@ -164,6 +164,7 @@ mal_v* read_atom (char*** token_list) {
   }
 
   set_atomic_content(result, token);
+
   return result;
 }
 
@@ -177,13 +178,16 @@ mal_v** read_list_helper(char*** token_list) {
   
   if (token[0] == ')') {
     pop(token_list);
-    result = ll_new(NULL);
+    result = ll_new(result);
+    *result = (mal_v*) malloc(1);
     set_type(*result,NIL);
   } else {
     item = read_form(token_list);
     result = ll_new(read_list_helper(token_list));
     *result = item;
   }
+
+  free(token);
 
   return result;
 }
