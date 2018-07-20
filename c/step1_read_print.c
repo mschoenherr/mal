@@ -8,7 +8,7 @@
 #include "printer.h"
 #include "ll.c/ll.h"
 
-/* Stub function returning its arg */
+/* Transforms input string to an ast*/
 mal_v* READ(char* input) {
 
   return read_str(input);
@@ -20,7 +20,7 @@ mal_v* EVAL(mal_v* ast) {
   return ast;
 }
 
-/* Stub function returning its arg */
+/* Printing ast to a string*/
 char* PRINT(mal_v* ast) {
 
   return pr_str(ast);
