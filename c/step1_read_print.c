@@ -43,7 +43,9 @@ int main(int* argc, char** argv) {
   while(input = linenoise("mal-user> ")) {
 
     linenoiseHistoryAdd(input);
-    puts(rep(input));
+    char* to_print = rep(input);
+    puts(to_print);
+    free(to_print);
     linenoiseFree(input);
   }
 
