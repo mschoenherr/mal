@@ -71,7 +71,7 @@ char* pop_nonspace_substr (char** input, int num_chars) {
   }
 
   /* allocating for pos++ chars, for insert of \0 */
-  char* result = (char *) malloc(pos + 1);
+  char* result = (char *) malloc(sizeof(char) * pos + 1);
 
   if (pos) {
     strncpy(result, *input, pos);
@@ -141,7 +141,7 @@ char** tokenize (char** input) {
 /* peek and pop take a pointer to a linked list of tokens.
    This way, freeing resources can be handled by ll.c */
 char* peek (char*** token_list) {
-  char* token = (char*) malloc(strlen(**token_list) + 1);
+  char* token = (char*) malloc(sizeof(char) * (strlen(**token_list) + 1));
   strcpy(token, **token_list);
   return token;
 }
@@ -154,7 +154,7 @@ char* pop (char*** token_list) {
 
 mal_v* read_atom (char*** token_list) {
 
-  mal_v* result = (mal_v*) malloc(1);
+  mal_v* result = (mal_v*) malloc(sizeof(mal_v));
   char* token = pop(token_list);
 
   if (isdigit(token[0]) || (token[0] == '-' && isdigit(token[1]))) {
@@ -179,7 +179,7 @@ mal_v** read_list_helper(char*** token_list) {
   if (token[0] == ')') {
     pop(token_list);
     result = ll_new(result);
-    *result = (mal_v*) malloc(1);
+    *result = (mal_v*) malloc(sizeof(mal_v));
     set_type(*result,NIL);
   } else {
     item = read_form(token_list);
@@ -195,7 +195,7 @@ mal_v** read_list_helper(char*** token_list) {
 mal_v* read_list(char*** token_list) {
 
   mal_v** llist = read_list_helper(token_list);
-  mal_v* result = (mal_v*) malloc(1);
+  mal_v* result = (mal_v*) malloc(sizeof(mal_v));
 
   set_type(result, LIST);
   set_list_content(result, llist);
@@ -214,6 +214,8 @@ mal_v* read_form(char*** token_list) {
   } else {
     result = read_atom(token_list);
   }
+
+  free(token);
 
   // maybe throw error, if token_list non-empty, now
 

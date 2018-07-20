@@ -1,12 +1,9 @@
 #ifndef MAL_TYPE
 #define MAL_TYPE
+
 typedef struct mal_typed_value {
   char type;
-  union {
-    int integer;
-    char* symbol;
-    struct mal_typed_value** list;
-  } value;
+  void* value;
 } mal_v;
 #endif /* MAL_TYPE */
 

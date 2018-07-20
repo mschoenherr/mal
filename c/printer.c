@@ -9,14 +9,13 @@
 void realloc_append_str(char** stem, char* appendix) {
   int old_len = strlen(*stem);
   int new_len = old_len + strlen(appendix) + 1;
-  (char*) realloc(*stem, new_len);
+  *stem =  realloc(*stem, sizeof(char) * new_len);
   strcpy((*stem) + old_len, appendix);
 }
 
 /* Quick and dirty calculator for number of digits of an int*/
 int digit_count_int(int n) {
-  if (n == 0) { return 1;}
-  int dec_len = 0;
+  int dec_len = 1;
   if (n < 0) {
     n = -n;
     dec_len++;
@@ -31,7 +30,7 @@ int digit_count_int(int n) {
 char* pr_int(mal_v* value) {
   int num = *((int*) get_atomic_content(value));
   int len = digit_count_int(num);
-  char* result = (char*) malloc(len + 1);
+  char* result = (char*) malloc(sizeof(char) * (len + 1));
   sprintf(result, "%d", num);
   return result;
 }
@@ -41,7 +40,7 @@ char* pr_str(mal_v* value);
 
 char* pr_list(mal_v* value) {
   mal_v** list_content = get_list_content(value);
-  char* result = (char*) malloc(2);
+  char* result = (char*) malloc(sizeof(char) * 2);
   strcpy(result, "(");
   
   while (ll_next(list_content)) {
@@ -58,7 +57,7 @@ char* pr_list(mal_v* value) {
 }
 
 char* pr_symbol(mal_v* value) {
-  return *((char**) get_atomic_content(value));
+  return (char*) get_atomic_content(value);
 }
 
 char* pr_str(mal_v* value) {
