@@ -1,20 +1,22 @@
 #include <string.h>
 #include <stdlib.h>
 #include "ll.c/ll.h"
+#include <stdarg.h>
 
 /* Basis for type system */
-char NIL = 0;
-char LIST = 1;
-char SYMBOL = 2;
-char INTEGER = 3;
+char FUNCTION = 0;
+char NIL = 1;
+char LIST = 2;
+char SYMBOL = 3;
+char INTEGER = 4;
 
-#ifndef MAL_TYPE
-#define MAL_TYPE
+
 typedef struct mal_typed_value {
   char type;
   void* value;
 } mal_v;
-#endif /* MAL_TYPE */
+
+typedef mal_v* (*mal_func)(mal_v*, ...);
 
 int set_type (mal_v* value, char type) {
 
@@ -38,6 +40,14 @@ int set_atomic_content (mal_v* value, char* token) {
   }
   
   return 0;
+}
+
+int set_function_content(mal_v* value, mal_func fun) {
+  value->value = fun;
+}
+
+mal_func get_function_content(mal_v* value) {
+  return value->value;
 }
 
 int set_list_content(mal_v* list, mal_v** llist) {
