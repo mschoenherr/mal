@@ -7,6 +7,7 @@
 #include "reader.h"
 #include "printer.h"
 #include "ll.c/ll.h"
+#include "eval.h"
 
 /* Transforms input string to an ast*/
 mal_v* READ(char* input) {
